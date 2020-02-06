@@ -47,7 +47,7 @@ void init_target_properties() {
 
 }
 
-void property_override(char const* prop, char const* value) {
+void property_override(char const prop[], char const value[]) {
     prop_info* pi;
 
     pi = (prop_info*) __system_property_find(prop);
@@ -57,7 +57,7 @@ void property_override(char const* prop, char const* value) {
         __system_property_add(prop, strlen(prop), value, strlen(value));
 }
 
-void property_override_dual(char const* system_prop, char const* vendor_prop, char const* value) {
+void property_override_dual(char const system_prop[], char const vendor_prop[], char const value[]) {
     property_override(system_prop, value);
     property_override(vendor_prop, value);
 }
@@ -143,7 +143,7 @@ void set_fingerprint() {
 	property_override_dual("ro.build.fingerprint", "ro.boot.fingerprint", new_fingerprint);
 }
 
-void set_target_properties(const char *device, const char *model) {
+void set_target_properties(char const* device, char const* model) {
 	property_override_dual("ro.product.device", "ro.product.vendor.model", device);
 	property_override_dual("ro.product.model", "ro.product.vendor.device", model);
 
@@ -163,7 +163,7 @@ void set_target_properties(const char *device, const char *model) {
 			set_dsds_properties();
 	}
 
-	char const *serial_number_file = SERIAL_NUMBER_FILE;
+	char const* serial_number_file = SERIAL_NUMBER_FILE;
 	std::string serial_number;
 
 	if (ReadFileToString(serial_number_file, &serial_number)) {
