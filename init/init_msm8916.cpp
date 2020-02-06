@@ -43,13 +43,12 @@ using android::base::Trim;
 #define SERIAL_NUMBER_FILE "/efs/FactoryApp/serial_no"
 
 __attribute__ ((weak))
-void init_target_properties()
-{
+void init_target_properties() {
+
 }
 
-void property_override(char const prop[], char const value[])
-{
-    prop_info *pi;
+void property_override(char const* prop, char const* value) {
+    prop_info* pi;
 
     pi = (prop_info*) __system_property_find(prop);
     if (pi)
@@ -58,8 +57,7 @@ void property_override(char const prop[], char const value[])
         __system_property_add(prop, strlen(prop), value, strlen(value));
 }
 
-void property_override_dual(char const system_prop[], char const vendor_prop[], char const value[])
-{
+void property_override_dual(char const* system_prop, char const* vendor_prop, char const* value) {
     property_override(system_prop, value);
     property_override(vendor_prop, value);
 }
@@ -70,10 +68,9 @@ void property_override_dual(char const system_prop[], char const vendor_prop[], 
  * @prereq: Assumes that integer is non-negative.
  *
  * @return: integer value read if succesful, -1 otherwise. */
-int read_integer(const char* filename)
-{
+int read_integer(char const* filename) {
 	int retval;
-	FILE * file;
+	FILE* file;
 
 	/* open the file */
 	if (!(file = fopen(filename, "r"))) {
@@ -86,8 +83,7 @@ int read_integer(const char* filename)
 	return retval;
 }
 
-void set_cdma_properties(const char *operator_alpha, const char *operator_numeric, const char * network)
-{
+void set_cdma_properties(char const* operator_alpha, char const* operator_numeric, char const* network) {
 	/* Dynamic CDMA Properties */
 	android::init::property_set("ro.cdma.home.operator.alpha", operator_alpha);
 	android::init::property_set("ro.cdma.home.operator.numeric", operator_numeric);
@@ -101,36 +97,31 @@ void set_cdma_properties(const char *operator_alpha, const char *operator_numeri
 	android::init::property_set("telephony.lteOnCdmaDevice", "1");
 }
 
-void set_dsds_properties()
-{
+void set_dsds_properties() {
 	android::init::property_set("ro.multisim.simslotcount", "2");
 	android::init::property_set("ro.telephony.ril.config", "simactivation");
 	android::init::property_set("persist.radio.multisim.config", "dsds");
 	android::init::property_set("rild.libpath2", "/system/lib/libsec-ril-dsds.so");
 }
 
-void set_gsm_properties()
-{
+void set_gsm_properties() {
 	android::init::property_set("telephony.lteOnCdmaDevice", "0");
 	android::init::property_set("ro.telephony.default_network", "9");
 }
 
-void set_lte_properties()
-{
+void set_lte_properties() {
 	android::init::property_set("persist.radio.lte_vrte_ltd", "1");
 	android::init::property_set("telephony.lteOnCdmaDevice", "0");
 	android::init::property_set("telephony.lteOnGsmDevice", "1");
 	android::init::property_set("ro.telephony.default_network", "10");
 }
 
-void set_wifi_properties()
-{
+void set_wifi_properties() {
 	android::init::property_set("ro.carrier", "wifi-only");
 	android::init::property_set("ro.radio.noril", "1");
 }
 
-void set_fingerprint()
-{
+void set_fingerprint() {
 	std::string fingerprint = GetProperty("ro.build.fingerprint", "");
 
 	if ((strlen(fingerprint.c_str()) > 1) && (strlen(fingerprint.c_str()) <= PROP_VALUE_MAX))
@@ -152,8 +143,7 @@ void set_fingerprint()
 	property_override_dual("ro.build.fingerprint", "ro.boot.fingerprint", new_fingerprint);
 }
 
-void set_target_properties(const char *device, const char *model)
-{
+void set_target_properties(const char *device, const char *model) {
 	property_override_dual("ro.product.device", "ro.product.vendor.model", device);
 	property_override_dual("ro.product.model", "ro.product.vendor.device", model);
 
@@ -182,8 +172,7 @@ void set_target_properties(const char *device, const char *model)
 	}
 }
 
-void vendor_load_properties(void)
-{
+void vendor_load_properties(void) {
     // Init a dummy BT MAC address, will be overwritten later
     android::init::property_set("ro.boot.btmacaddr", "00:00:00:00:00:00");
 

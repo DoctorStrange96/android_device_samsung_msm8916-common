@@ -49,7 +49,7 @@ void set_gsm_properties();
 void set_lte_properties();
 void set_wifi_properties();
 
-void set_cdma_properties(const char *operator_alpha, const char *operator_numeric, const char * network);
-void set_target_properties(const char *device, const char *model);
+void set_cdma_properties(char const* operator_alpha, char const* operator_numeric, char const* network);
+void set_target_properties(char const* device, char const* model);
 
 #endif /* __INIT_MSM8916__H__ */
